@@ -1,107 +1,219 @@
-<!doctype html>
-<html lang="zh-Hant">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#07151a">
-  <meta name="description" content="陪小小夢魔走過兩段夢境，學會分清需要與想要、分散投資與保留預備金。">
-  <title>小小夢魔｜星星存錢夢</title>
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='85'%3E%E2%AD%90%3C/text%3E%3C/svg%3E">
-  <link rel="stylesheet" href="style.css">
-  <script src="game.js" defer></script>
-</head>
-<body>
-  <a class="skip-link" href="#main">跳到遊戲內容</a>
-  <header class="topbar">
-    <a class="brand" href="#home" aria-label="小小夢魔首頁"><span class="brand-mark">✦</span><span>小小夢魔<small>星星存錢夢</small></span></a>
-    <div class="top-meta"><span class="age-tag">理財冒險・適合小學生</span><button class="sound-toggle" id="sound-toggle" type="button" aria-pressed="false" aria-label="開啟或關閉音效">♫ <span>音效關</span></button></div>
-  </header>
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0">
+		<title>小小夢魔：星星存錢夢</title>
+		<style>
+html, body, #canvas {
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
 
-  <main id="main">
-    <section class="screen home-screen active" id="home" aria-labelledby="home-title">
-      <div class="home-art art-bank" role="img" aria-label="小小夢魔站在巨大星星銀行的木橋上"></div>
-      <div class="home-shade"></div>
-      <div class="home-content">
-        <p class="eyebrow"><span></span> 一場關於選擇與勇氣的夢</p>
-        <h1 id="home-title">小小夢魔<em>：星星存錢夢</em></h1>
-        <p class="hero-copy">午夜鐘聲響起，星星銀行的大門悄悄鎖上了。<br>跟著披黃斗篷的夢魔，找回兩把星星鑰匙吧。</p>
-        <div class="home-facts"><span>◇ 2 段夢境</span><span>◇ 2 個互動挑戰</span><span>◇ 一份成長紀錄</span></div>
-        <button class="button button-gold button-large" id="start-button" type="button">走進夢境 <span aria-hidden="true">✦</span></button>
-        <p class="home-note">遊戲中的星星是虛構點數，真實投資可能有損失。</p>
-      </div>
-      <div class="home-caption"><span>夢境 01</span><span>星星銀行・現在是午夜</span></div>
-      <div class="home-bottom"><span>一款給小小探險家的生活理財遊戲</span><span>使用滑鼠、觸控或鍵盤都能遊玩</span></div>
-    </section>
+body {
+	color: white;
+	background-color: black;
+	overflow: hidden;
+	touch-action: none;
+}
 
-    <section class="screen quiz-screen" id="warmup" aria-labelledby="quiz-title" hidden>
-      <div class="quiz-card">
-        <div class="chapter-label">出發前的小暖身</div>
-        <div class="quiz-progress" id="quiz-progress" aria-label="暖身題目進度"></div>
-        <h1 id="quiz-title">先看看你已經知道多少</h1>
-        <p class="quiz-intro">答錯也沒關係，完成兩關後會再回答相同的問題，看看自己多學會了什麼。</p>
-        <div id="warmup-question" class="question-block"></div>
-        <p id="warmup-feedback" class="feedback" aria-live="polite"></p>
-        <button class="button button-gold" id="warmup-next" type="button" disabled>繼續</button>
-      </div>
-    </section>
+#canvas {
+	display: block;
+}
 
-    <section class="screen game-screen" id="game" aria-labelledby="stage-title" hidden>
-      <div class="scene" id="scene">
-        <div class="scene-image" id="scene-image" role="img" aria-label="夢境場景"></div>
-        <div class="scene-vignette"></div>
-        <div class="scene-topline">
-          <button class="icon-button" id="home-button" type="button" aria-label="回到首頁">⌂</button>
-          <div class="chapter-title"><span id="stage-kicker">夢境 01</span><strong id="stage-title">星星銀行</strong></div>
-          <div class="score-chip"><span>本關星星分數</span><strong id="stage-score">100</strong></div>
-        </div>
-        <div class="scene-floor"></div>
-        <div class="game-character" aria-hidden="true"><span class="cape"></span><span class="boots"></span><span class="glow"></span></div>
-        <div class="door-lock" aria-hidden="true"><span>✦</span></div>
-        <div class="game-panel" id="game-panel">
-          <div class="panel-overline"><span class="key-indicator" id="key-indicator">✦ 尚未取得鑰匙</span><span id="challenge-counter">互動單元 01 / 01</span></div>
-          <h2 id="challenge-title">先照顧需要，再留一點星星</h2>
-          <p class="challenge-story" id="challenge-story"></p>
-          <div class="choice-list" id="choice-list" role="group" aria-labelledby="challenge-title"></div>
-          <div class="feedback" id="game-feedback" aria-live="polite"></div>
-          <div class="panel-actions"><button class="text-button" id="hint-button" type="button">給我一點提示 <span aria-hidden="true">◌</span></button><button class="button button-gold" id="submit-answer" type="button" disabled>確認選擇</button></div>
-          <button class="button button-gold continue-button" id="continue-button" type="button" hidden>收下鑰匙，繼續前進</button>
-          <div class="key-inventory" aria-label="星星鑰匙收集狀況"><span id="key-one">◇</span><span id="key-two">◇</span><span class="inventory-label">夢門鑰匙</span></div>
-        </div>
-        <div class="scene-subtitle" id="scene-subtitle">走近夢門，聽聽它想告訴你的事。</div>
-      </div>
-    </section>
+#canvas:focus {
+	outline: none;
+}
 
-    <section class="screen quiz-screen" id="review" aria-labelledby="review-title" hidden>
-      <div class="quiz-card">
-        <div class="chapter-label">冒險後的小回顧</div>
-        <div class="quiz-progress" id="review-progress" aria-label="回顧題目進度"></div>
-        <h1 id="review-title">再回答一次，看看你的新想法</h1>
-        <p class="quiz-intro">這不是考試。想一想剛才學到的線索，選出你現在認為最好的做法。</p>
-        <div id="review-question" class="question-block"></div>
-        <p id="review-feedback" class="feedback" aria-live="polite"></p>
-        <button class="button button-gold" id="review-next" type="button" disabled>繼續</button>
-      </div>
-    </section>
+#status, #status-splash, #status-progress {
+	position: absolute;
+	left: 0;
+	right: 0;
+}
 
-    <section class="screen summary-screen" id="summary" aria-labelledby="summary-title" hidden>
-      <div class="summary-art" role="img" aria-label="兩把星星鑰匙照亮小小夢魔回家的路"></div>
-      <div class="summary-content">
-        <p class="eyebrow"><span></span> 夢境冒險完成</p>
-        <h1 id="summary-title">你讓星星<em>有了方向。</em></h1>
-        <p class="summary-lead">兩把鑰匙都找到了！真正的寶藏，是你現在會多想一步。</p>
-        <div class="result-cards">
-          <article class="result-card"><span class="result-icon">Ⅰ</span><span class="result-label">夢境一・需要與想要</span><strong id="final-score-one">100</strong><small>本關得分</small><p id="lesson-one"></p></article>
-          <article class="result-card"><span class="result-icon">Ⅱ</span><span class="result-label">夢境二・分散與風險</span><strong id="final-score-two">100</strong><small>本關得分</small><p id="lesson-two"></p></article>
-        </div>
-        <div class="progress-card"><div><span class="progress-title">理財想法的進步</span><span class="progress-detail" id="progress-detail"></span></div><div class="progress-stat"><strong id="progress-score">+0</strong><span>個百分點</span></div><div class="progress-track"><i id="progress-fill"></i></div></div>
-        <div class="reflection"><span class="reflection-star">✦</span><p><b>帶著這三個問題回家</b><br>這是「需要」還是「想要」？<br>如果結果不確定，我可以怎麼分散風險？<br>我有留下一些星星，應付臨時需要嗎？</p></div>
-        <p class="safety-note">這是虛構的理財學習遊戲，不構成投資建議。投資可能賺錢，也可能損失本金。</p>
-        <button class="button button-gold" id="play-again" type="button">再做一次夢境</button>
-        <button class="text-button share-button" id="copy-result" type="button">複製我的冒險成果</button>
-      </div>
-    </section>
-  </main>
-  <div class="toast" id="toast" role="status" aria-live="polite"></div>
-  <footer class="site-footer">小小夢魔・星星存錢夢 <span>原創教學遊戲場景｜無需註冊，遊戲記錄只留在此裝置</span></footer>
-</body>
+#status, #status-splash {
+	top: 0;
+	bottom: 0;
+}
+
+#status {
+	background-color: #242424;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	visibility: hidden;
+}
+
+#status-splash {
+	max-height: 100%;
+	max-width: 100%;
+	margin: auto;
+}
+
+#status-splash.show-image--false {
+	display: none;
+}
+
+#status-splash.fullsize--true {
+	height: 100%;
+	width: 100%;
+	object-fit: contain;
+}
+
+#status-splash.use-filter--false {
+	image-rendering: pixelated;
+}
+
+#status-progress, #status-notice {
+	display: none;
+}
+
+#status-progress {
+	bottom: 10%;
+	width: 50%;
+	margin: 0 auto;
+}
+
+#status-notice {
+	background-color: #5b3943;
+	border-radius: 0.5rem;
+	border: 1px solid #9b3943;
+	color: #e0e0e0;
+	font-family: 'Noto Sans', 'Droid Sans', Arial, sans-serif;
+	line-height: 1.3;
+	margin: 0 2rem;
+	overflow: hidden;
+	padding: 1rem;
+	text-align: center;
+	z-index: 1;
+}
+		</style>
+		<link id="-gd-engine-icon" rel="icon" type="image/png" href="index.icon.png" />
+<link rel="apple-touch-icon" href="index.apple-touch-icon.png"/>
+
+	</head>
+	<body>
+		<canvas id="canvas">
+			Your browser does not support the canvas tag.
+		</canvas>
+
+		<noscript>
+			Your browser does not support JavaScript.
+		</noscript>
+
+		<div id="status">
+			<img id="status-splash" class="show-image--true fullsize--true use-filter--true" src="index.png" alt="">
+			<progress id="status-progress"></progress>
+			<div id="status-notice"></div>
+		</div>
+
+		<script src="index.js"></script>
+		<script>
+const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":11148640,"index.wasm":39514754},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
+const GODOT_THREADS_ENABLED = false;
+const engine = new Engine(GODOT_CONFIG);
+
+(function () {
+	const statusOverlay = document.getElementById('status');
+	const statusProgress = document.getElementById('status-progress');
+	const statusNotice = document.getElementById('status-notice');
+
+	let initializing = true;
+	let statusMode = '';
+
+	function setStatusMode(mode) {
+		if (statusMode === mode || !initializing) {
+			return;
+		}
+		if (mode === 'hidden') {
+			statusOverlay.remove();
+			initializing = false;
+			return;
+		}
+		statusOverlay.style.visibility = 'visible';
+		statusProgress.style.display = mode === 'progress' ? 'block' : 'none';
+		statusNotice.style.display = mode === 'notice' ? 'block' : 'none';
+		statusMode = mode;
+	}
+
+	function setStatusNotice(text) {
+		while (statusNotice.lastChild) {
+			statusNotice.removeChild(statusNotice.lastChild);
+		}
+		const lines = text.split('\n');
+		lines.forEach((line) => {
+			statusNotice.appendChild(document.createTextNode(line));
+			statusNotice.appendChild(document.createElement('br'));
+		});
+	}
+
+	function displayFailureNotice(err) {
+		console.error(err);
+		if (err instanceof Error) {
+			setStatusNotice(err.message);
+		} else if (typeof err === 'string') {
+			setStatusNotice(err);
+		} else {
+			setStatusNotice('An unknown error occurred.');
+		}
+		setStatusMode('notice');
+		initializing = false;
+	}
+
+	const missing = Engine.getMissingFeatures({
+		threads: GODOT_THREADS_ENABLED,
+	});
+
+	if (missing.length !== 0) {
+		if (GODOT_CONFIG['serviceWorker'] && GODOT_CONFIG['ensureCrossOriginIsolationHeaders'] && 'serviceWorker' in navigator) {
+			let serviceWorkerRegistrationPromise;
+			try {
+				serviceWorkerRegistrationPromise = navigator.serviceWorker.getRegistration();
+			} catch (err) {
+				serviceWorkerRegistrationPromise = Promise.reject(new Error('Service worker registration failed.'));
+			}
+			// There's a chance that installing the service worker would fix the issue
+			Promise.race([
+				serviceWorkerRegistrationPromise.then((registration) => {
+					if (registration != null) {
+						return Promise.reject(new Error('Service worker already exists.'));
+					}
+					return registration;
+				}).then(() => engine.installServiceWorker()),
+				// For some reason, `getRegistration()` can stall
+				new Promise((resolve) => {
+					setTimeout(() => resolve(), 2000);
+				}),
+			]).then(() => {
+				// Reload if there was no error.
+				window.location.reload();
+			}).catch((err) => {
+				console.error('Error while registering service worker:', err);
+			});
+		} else {
+			// Display the message as usual
+			const missingMsg = 'Error\nThe following features required to run Godot projects on the Web are missing:\n';
+			displayFailureNotice(missingMsg + missing.join('\n'));
+		}
+	} else {
+		setStatusMode('progress');
+		engine.startGame({
+			'onProgress': function (current, total) {
+				if (current > 0 && total > 0) {
+					statusProgress.value = current;
+					statusProgress.max = total;
+				} else {
+					statusProgress.removeAttribute('value');
+					statusProgress.removeAttribute('max');
+				}
+			},
+		}).then(() => {
+			setStatusMode('hidden');
+		}, displayFailureNotice);
+	}
+}());
+		</script>
+	</body>
 </html>
